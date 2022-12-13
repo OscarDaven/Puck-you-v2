@@ -15,7 +15,6 @@ public class addscore : MonoBehaviour
 		score++;
 		changingtext.text = score.ToString();
 	}
-
 	
 }
 
