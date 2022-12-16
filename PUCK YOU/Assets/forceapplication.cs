@@ -34,6 +34,13 @@ public class forceapplication : MonoBehaviour
 		//force = new Vector2((int)Random.Range(-1000, 1000), (int)Random.Range(-1000, 1000));
 	}
 
+	void OnTriggerEnter2D (Collider2D colliderObject){
+		if (colliderObject.gameObject.name == "Spike"){
+			Debug.Log("Puck collided with spike");
+			Destroy(rb.gameObject);
+		}
+	}
+
  //   void OnMouseDown()
  //   {
  //       noforceapp = true;
