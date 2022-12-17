@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Score
   - Goal
+  - Spike
   layers:
   - Default
   - TransparentFX

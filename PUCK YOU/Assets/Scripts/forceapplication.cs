@@ -37,13 +37,6 @@ public class forceapplication : MonoBehaviour
 		//force = new Vector2((int)Random.Range(-1000, 1000), (int)Random.Range(-1000, 1000));
 	}
 
-	void OnTriggerEnter2D (Collider2D colliderObject){
-		if (colliderObject.gameObject.name == "Spike"){
-			Debug.Log("Puck collided with spike");
-			Destroy(rb.gameObject);
-		}
-	}
-
  //   void OnMouseDown()
  //   {
  //       noforceapp = true;
@@ -248,6 +241,11 @@ public class forceapplication : MonoBehaviour
 		if (other.gameObject.CompareTag("Goal")) //if  gameobject collides with another object with goal tag
 		{
 			StartCoroutine(WaitToSwitch());
+		}
+		else if (other.gameObject.CompareTag("Spike"))
+		{
+			Debug.Log("Puck collided with spike");
+			Destroy(rb.gameObject);
 		}
 	}
 }
