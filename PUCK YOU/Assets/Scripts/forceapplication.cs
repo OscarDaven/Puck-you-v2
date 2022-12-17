@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Threading;
 
 public class forceapplication : MonoBehaviour
 {
@@ -20,6 +22,7 @@ public class forceapplication : MonoBehaviour
 	public float stopvel;
 	private bool isdecreasing;
 	private Vector3 lastvel;
+	bool finished = false;
 
 	void Start()
     {
@@ -60,8 +63,8 @@ public class forceapplication : MonoBehaviour
 		{
 			isdecreasing = true;
 		}
-		Debug.Log("decreasing " + isdecreasing);
-		Debug.Log("stopped" + isstopped);
+		//Debug.Log("decreasing " + isdecreasing);
+		//Debug.Log("stopped" + isstopped);
 		if ((isstopped ==false)&&(isdecreasing)&&(Mathf.Abs(rb.velocity.x) < stopvel)&&(Mathf.Abs(rb.velocity.y) < stopvel)){ //sometimes triggers right after you shoot, way to early
             isstopped = true;
 			rb.velocity = new Vector3(0,0,transform.position.z);
@@ -73,6 +76,11 @@ public class forceapplication : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+		if (finished)//triggered when someone reaches the goal
+		{
+			SceneManager.LoadScene(2);//move to win screen
+			finished = false;
+		}
         if (isstopped)
         {
 			if (Input.GetMouseButtonDown(0))
@@ -226,5 +234,20 @@ public class forceapplication : MonoBehaviour
 			//	noforceapp = false;
 			//}
 		}
-    }   
+    }
+
+	IEnumerator WaitToSwitch()
+	{
+		yield return new WaitForSeconds(.4f);
+		finished = true;
+	}
+
+	void OnTriggerEnter2D(Collider2D other) //attempt to reset player position if moved outside of box
+	{
+		Debug.Log(other);
+		if (other.gameObject.CompareTag("Goal")) //if  gameobject collides with another object with goal tag
+		{
+			StartCoroutine(WaitToSwitch());
+		}
+	}
 }
