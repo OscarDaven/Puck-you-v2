@@ -23,9 +23,17 @@ public class forceapplication : MonoBehaviour
 	private bool isdecreasing;
 	private Vector3 lastvel;
 	bool finished = false;
+	ParticleSystem particles;
+	private bool isdead = false;
+	private SpriteRenderer spriteRenderer;
+	private Vector3 initpos;
 
 	void Start()
     {
+		initpos = transform.position;
+		spriteRenderer = GetComponent<SpriteRenderer>();
+		particles = GetComponent<ParticleSystem>();
+		particles.Stop();
 		lastvel = new Vector3(0,0,transform.position.z);
 		isdecreasing = false;
 		forcevec = transform.position;
@@ -74,7 +82,7 @@ public class forceapplication : MonoBehaviour
 			SceneManager.LoadScene(2);//move to win screen
 			finished = false;
 		}
-        if (isstopped)
+        if (isstopped || isdead)
         {
 			if (Input.GetMouseButtonDown(0))
 			{
@@ -235,6 +243,15 @@ public class forceapplication : MonoBehaviour
 		finished = true;
 	}
 
+	IEnumerator WaitToDie()
+	{
+		yield return new WaitForSeconds(.9f);
+		isdead = false;
+		transform.position = initpos;
+		this.spriteRenderer.enabled = true;
+		//Destroy(this); Change to reset to original position
+	}
+
 	void OnTriggerEnter2D(Collider2D other) //attempt to reset player position if moved outside of box
 	{
 		Debug.Log(other);
@@ -245,7 +262,11 @@ public class forceapplication : MonoBehaviour
 		else if (other.gameObject.CompareTag("Spike"))
 		{
 			Debug.Log("Puck collided with spike");
-			Destroy(rb.gameObject);
+			particles.Play();
+			isdead = true;
+			this.spriteRenderer.enabled = false;
+			rb.velocity = new Vector2(0, 0);
+			StartCoroutine(WaitToDie());
 		}
 	}
 }
