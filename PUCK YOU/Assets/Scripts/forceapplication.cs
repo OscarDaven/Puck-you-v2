@@ -37,6 +37,13 @@ public class forceapplication : MonoBehaviour
 		//force = new Vector2((int)Random.Range(-1000, 1000), (int)Random.Range(-1000, 1000));
 	}
 
+	void OnTriggerEnter2D (Collider2D colliderObject){
+		if (colliderObject.gameObject.name == "Spike"){
+			Debug.Log("Puck collided with spike");
+			Destroy(rb.gameObject);
+		}
+	}
+
  //   void OnMouseDown()
  //   {
  //       noforceapp = true;
@@ -97,7 +104,7 @@ public class forceapplication : MonoBehaviour
 					float angle;
 					if (dif.y < 0) //calculates the angle using a flat like at 0 degrees as a reference
 					{
-						angle = (360 - Vector3.Angle(refangle, dif)) * (Mathf.PI / 180);
+						angle =  (360 - Vector3.Angle(refangle, dif)) * (Mathf.PI / 180);
 					}
 					else
 					{
@@ -212,8 +219,9 @@ public class forceapplication : MonoBehaviour
 			{
 				//forces sometimes move the ball in the wrong direction
 				forcevec = forcevec - transform.position;
-				forcevec.x = forcevec.x * powerscale; //scales up the power based on the mutable powerscale variable
-				forcevec.y = forcevec.y * powerscale;
+				// changed it to negative so it goes in the opposite direction from where the mouse is pulled 
+				forcevec.x = -(forcevec.x * powerscale); //scales up the power based on the mutable powerscale variable
+				forcevec.y = -(forcevec.y * powerscale);
 				forcevec = forcevec + transform.position;
 				rb.AddForce(forcevec);
 				lr.enabled = false;
