@@ -1,12 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class forceapplication : MonoBehaviour
+public class forceapplication : NetworkBehaviour
 {
-    public Vector2 force;
+
+	public GameObject puck;
+	// [SerializeField] public Transform puckTransform;
+
+    public Vector2 force = new Vector2(10.0f, 10.0f);
     Rigidbody2D rb;
-    bool noforceapp = true;
+    // bool noforceapp = true;
     LineRenderer lr;
     Vector3 savepos;
     public new Camera camera;
@@ -14,30 +19,50 @@ public class forceapplication : MonoBehaviour
     Vector3 curPos;
     Vector3 lastpos;
     bool isstopped = true;
-	public float maxlength;
-	public float powerscale;
+	public float maxlength = 5;
+	public float powerscale = 100;
 	private Vector3 forcevec;
-	public float stopvel;
-	private bool isdecreasing;
-	private Vector3 lastvel;
+	public float stopvel = 0.5f;
+	public bool isdecreasing;
+  private Vector3 lastvel;
+
+
 
 	void Start()
     {
-		lastvel = new Vector3(0,0,transform.position.z);
+
+			if (!IsOwner) return;
+
+			Debug.Log("START");
+			// puckTransform = (-0.66, -0.21, 0);
+
+			// SpawnPuckServerRpc();
+
+		lastvel = new Vector3(0,0, transform.position.z);
 		isdecreasing = false;
 		forcevec = transform.position;
         lastpos = transform.position;
-        lr = gameObject.AddComponent<LineRenderer>();
+        lr = puck.AddComponent<LineRenderer>();
 		camOffset = new Vector3(0, 0, transform.position.z);
 		camera = Camera.main;
-        rb = GetComponent<Rigidbody2D>();
+
+			GetrbServerRpc();
+			rb = puck.GetComponent<Rigidbody2D>();
+
+		SetlastvelServerRpc();
+
+				// puck = rb.gameObject;
+				// puckTransform = transform;
+
+
 		//force = new Vector2((int)Random.Range(-1000, 1000), (int)Random.Range(-1000, 1000));
 	}
 
 	void OnTriggerEnter2D (Collider2D colliderObject){
-		if (colliderObject.gameObject.name == "Spike"){
+		if (colliderObject.gameObject.tag == "Spike"){
 			Debug.Log("Puck collided with spike");
-			Destroy(rb.gameObject);
+			// Destroy(rb.gameObject);
+			SpikeCollideServerRpc();
 		}
 	}
 
@@ -52,31 +77,51 @@ public class forceapplication : MonoBehaviour
 
     void FixedUpdate()
     {
-		float curx = Mathf.Abs(rb.velocity.x);
-		float cury = Mathf.Abs(rb.velocity.y);
-		float pastx = Mathf.Abs(lastvel.x);
-		float pasty = Mathf.Abs(lastvel.y);
-		if ((curx < pastx) && (cury < pasty))//checks to see if the velocity vector of the puck is decreasing
-		{
-			isdecreasing = true;
+
+			GetrbServerRpc();
+			rb = puck.GetComponent<Rigidbody2D>();
+
+
+			// if (!IsOwner) return;
+
+
+			float curx = Mathf.Abs(rb.velocity.x);
+			float cury = Mathf.Abs(rb.velocity.y);
+			float pastx = Mathf.Abs(lastvel.x);
+			float pasty = Mathf.Abs(lastvel.y);
+
+			if ((curx < pastx) && (cury < pasty))//checks to see if the velocity vector of the puck is decreasing
+			{
+				isdecreasing = true;
+			}
+			// Debug.Log("decreasing " + isdecreasing);
+			// Debug.Log("stopped" + isstopped);
+			if ((isstopped == false)&&(isdecreasing)&&(Mathf.Abs(rb.velocity.x) < stopvel)&&(Mathf.Abs(rb.velocity.y) < stopvel)){ //sometimes triggers right after you shoot, way too early
+							
+				isstopped = true;
+
+				SetrbZeroVelocityServerRpc();
+				rb.velocity = new Vector3(0,0,transform.position.z);
+				isdecreasing = false;
+			}
+			lastvel = rb.velocity;
 		}
-		Debug.Log("decreasing " + isdecreasing);
-		Debug.Log("stopped" + isstopped);
-		if ((isstopped ==false)&&(isdecreasing)&&(Mathf.Abs(rb.velocity.x) < stopvel)&&(Mathf.Abs(rb.velocity.y) < stopvel)){ //sometimes triggers right after you shoot, way to early
-            isstopped = true;
-			rb.velocity = new Vector3(0,0,transform.position.z);
-			isdecreasing = false;
-        }
-		lastvel = rb.velocity;
-    }
 
     // Update is called once per frame
     void Update()
     {
+
+			if (!IsOwner) return;
+
+			GetrbServerRpc();
+			rb = puck.GetComponent<Rigidbody2D>();
+
+
         if (isstopped)
         {
 			if (Input.GetMouseButtonDown(0))
 			{
+				Debug.Log("MBDOWN");
 				lr.enabled = true;
 				lr.positionCount = 2;
 				savepos = camera.ScreenToWorldPoint(Input.mousePosition) + camOffset;
@@ -114,6 +159,74 @@ public class forceapplication : MonoBehaviour
 					forcevec = (transform.position + dif);
 				}
 				
+
+			}
+			if (Input.GetMouseButtonUp(0))
+			{
+				//forces sometimes move the ball in the wrong direction
+				forcevec = forcevec - transform.position;
+				// changed it to negative so it goes in the opposite direction from where the mouse is pulled 
+				forcevec.x = -(forcevec.x * powerscale); //scales up the power based on the mutable powerscale variable
+				forcevec.y = -(forcevec.y * powerscale);
+				forcevec = forcevec + transform.position;
+				// rb.AddForce(forcevec);
+				MovePuckServerRpc(forcevec);
+				lr.enabled = false;
+				isstopped = false;
+				forcevec = transform.position;
+			}
+			//if (noforceapp)
+			//{
+			//	rb.AddForce(force);
+			//	noforceapp = false;
+			//}
+		}
+    }   
+
+	[ServerRpc(RequireOwnership = false)]
+	private void SpikeCollideServerRpc(){
+		Debug.Log("HELLLLLLLLLLLLO");
+		// Destroy(puck);
+		puck.GetComponent<NetworkObject>().Despawn();
+	}
+
+	[ServerRpc(RequireOwnership = false)]
+	private void MovePuckServerRpc(Vector3 forcevec){
+		rb = puck.GetComponent<Rigidbody2D>();
+		Debug.Log("MOVING");
+		rb.AddForce(forcevec);
+				// lr.enabled = false;
+				// isstopped = false;
+				// forcevec = transform.position;
+	}
+
+	[ServerRpc(RequireOwnership = false)]
+	private void GetrbServerRpc(){
+		rb = puck.GetComponent<Rigidbody2D>();
+	}
+
+	[ServerRpc(RequireOwnership = false)]
+	private void SetrbZeroVelocityServerRpc(){
+		Debug.Log("SETTING ZERO VEL");
+		rb.velocity = new Vector3(0,0,transform.position.z);
+		isstopped = true;
+	}
+
+	[ServerRpc(RequireOwnership = false)]
+	private void SetlastvelServerRpc(){
+		lastvel = new Vector3(0,0,transform.position.z);
+	}
+
+
+	// [ServerRpc]
+	// private void SpawnPuckServerRpc(){
+	// 	// Instantiate(puck, new Vector3(0, 0, 0), Quaternion.identity);
+	// 	puck.GetComponent<NetworkObject>().Despawn();
+	// }
+
+}
+
+
 
 				//if (Mathf.Abs(dif.x) > Mathf.Abs(dif.y)) //abs is used to handle negative edge cases
 				//{
@@ -206,25 +319,3 @@ public class forceapplication : MonoBehaviour
 				//	dif.x = (Mathf.Abs((maxlength / dif.y)) * dif.x);
 				//	dif.y = (maxlength * -1);
 				//}
-			}
-			if (Input.GetMouseButtonUp(0))
-			{
-				//forces sometimes move the ball in the wrong direction
-				forcevec = forcevec - transform.position;
-				// changed it to negative so it goes in the opposite direction from where the mouse is pulled 
-				forcevec.x = -(forcevec.x * powerscale); //scales up the power based on the mutable powerscale variable
-				forcevec.y = -(forcevec.y * powerscale);
-				forcevec = forcevec + transform.position;
-				rb.AddForce(forcevec);
-				lr.enabled = false;
-				isstopped = false;
-				forcevec = transform.position;
-			}
-			//if (noforceapp)
-			//{
-			//	rb.AddForce(force);
-			//	noforceapp = false;
-			//}
-		}
-    }   
-}
