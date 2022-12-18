@@ -27,7 +27,7 @@ MonoBehaviour:
     height: 1052
   m_ShowMode: 4
   m_Title: Inspector
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -58,7 +58,7 @@ MonoBehaviour:
 =======
     width: 1920
     height: 1052
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
   m_UseTopView: 1
@@ -86,7 +86,7 @@ MonoBehaviour:
     width: 1706.6666
 =======
     width: 1920
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
     height: 30
   m_MinSize: {x: 0, y: 0}
   m_MaxSize: {x: 0, y: 0}
@@ -113,7 +113,7 @@ MonoBehaviour:
 =======
     y: 1032
     width: 1920
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
     height: 20
   m_MinSize: {x: 0, y: 0}
   m_MaxSize: {x: 0, y: 0}
@@ -150,7 +150,7 @@ MonoBehaviour:
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
   controlID: 161
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -184,7 +184,7 @@ MonoBehaviour:
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
   controlID: 146
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -218,7 +218,7 @@ MonoBehaviour:
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
   controlID: 147
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -242,7 +242,7 @@ MonoBehaviour:
 =======
     width: 362
     height: 594
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
   m_MinSize: {x: 201, y: 221}
   m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 13}
@@ -275,7 +275,7 @@ MonoBehaviour:
     y: 0
     width: 1104
     height: 594
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
   m_MinSize: {x: 202, y: 221}
   m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 14}
@@ -308,7 +308,7 @@ MonoBehaviour:
     y: 594
     width: 1466
     height: 408
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
   m_MinSize: {x: 231, y: 271}
   m_MaxSize: {x: 10001, y: 10021}
   m_ActualView: {fileID: 15}
@@ -342,7 +342,7 @@ MonoBehaviour:
     y: 0
     width: 454
     height: 1002
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
   m_MinSize: {x: 276, y: 71}
   m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 17}
@@ -380,7 +380,7 @@ MonoBehaviour:
     y: 19
     width: 1102
     height: 573
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -395,7 +395,7 @@ MonoBehaviour:
   m_TargetSize: {x: 682, y: 511.3333}
 =======
   m_TargetSize: {x: 981, y: 552}
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
   m_TextureFilterMode: 0
   m_TextureHideFlags: 61
   m_RenderIMGUI: 1
@@ -420,7 +420,7 @@ MonoBehaviour:
     m_HBaseRangeMax: 490.5
     m_VBaseRangeMin: -276
     m_VBaseRangeMax: 276
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
     m_HAllowExceedBaseRangeMin: 1
     m_HAllowExceedBaseRangeMax: 1
     m_VAllowExceedBaseRangeMin: 1
@@ -448,7 +448,7 @@ MonoBehaviour:
       height: 552
     m_Scale: {x: 1, y: 1}
     m_Translation: {x: 551, y: 276}
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
@@ -471,7 +471,7 @@ MonoBehaviour:
     m_MinimalGUI: 1
   m_defaultScale: 1
   m_LastWindowPixelSize: {x: 1102, y: 573}
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
   m_LowResolutionForAspectRatios: 01000000000000000000
@@ -497,7 +497,7 @@ MonoBehaviour:
     m_Image: {fileID: -3734745235275155857, guid: 0000000000000000d000000000000000, type: 0}
 =======
     m_Image: {fileID: 7966133145522015247, guid: 0000000000000000d000000000000000, type: 0}
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
@@ -510,7 +510,7 @@ MonoBehaviour:
     y: 58
     width: 361
     height: 573
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -526,7 +526,7 @@ MonoBehaviour:
       m_SelectedIDs: a4060000
       m_LastClickedID: 0
       m_ExpandedIDs: bafaffff
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -546,7 +546,7 @@ MonoBehaviour:
         m_ClientGUIView: {fileID: 8}
 =======
         m_ClientGUIView: {fileID: 0}
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
       m_SearchString: 
     m_ExpandedScenes: []
     m_CurrenRootInstanceID: 0
@@ -588,7 +588,7 @@ MonoBehaviour:
     y: 58
     width: 1102
     height: 573
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -853,7 +853,7 @@ MonoBehaviour:
     m_Target: {x: -6.015375, y: 1.7777296, z: -0.050630037}
     speed: 2
     m_Value: {x: -6.015375, y: 1.7777296, z: -0.050630037}
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -912,7 +912,7 @@ MonoBehaviour:
     m_Target: 5.929061
     speed: 2
     m_Value: 5.929061
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -957,7 +957,7 @@ MonoBehaviour:
     m_Image: {fileID: -5179483145760003458, guid: 0000000000000000d000000000000000, type: 0}
 =======
     m_Image: {fileID: -5467254957812901981, guid: 0000000000000000d000000000000000, type: 0}
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
@@ -970,7 +970,7 @@ MonoBehaviour:
     y: 652
     width: 1465
     height: 387
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -1000,7 +1000,7 @@ MonoBehaviour:
   m_LastProjectPath: C:\Users\banan\Git_Repositories\Puck-you-v2\PUCK YOU
 =======
   m_LastProjectPath: /Users/captainbanaynays/Documents/CS241/Puck-you-v2/PUCK YOU
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
@@ -1013,7 +1013,7 @@ MonoBehaviour:
     m_SelectedIDs: fe510000
     m_LastClickedID: 20990
     m_ExpandedIDs: 0000000000ca9a3bffffff7f
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1045,7 +1045,7 @@ MonoBehaviour:
     m_ExpandedIDs: 000000003c54000000ca9a3b
 =======
     m_ExpandedIDs: 0000000000ca9a3bffffff7f
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1077,7 +1077,7 @@ MonoBehaviour:
     m_ExpandedInstanceIDs: c6230000
 =======
     m_ExpandedInstanceIDs: c62300005e80000000000000
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1097,7 +1097,7 @@ MonoBehaviour:
       m_ClientGUIView: {fileID: 0}
 =======
       m_ClientGUIView: {fileID: 10}
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
       m_InstanceID: 0
@@ -1129,7 +1129,7 @@ MonoBehaviour:
     m_Image: {fileID: -4950941429401207979, guid: 0000000000000000d000000000000000, type: 0}
 =======
     m_Image: {fileID: -4327648978806127646, guid: 0000000000000000d000000000000000, type: 0}
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
@@ -1142,7 +1142,7 @@ MonoBehaviour:
     y: 544
     width: 1098.5
     height: 315
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -1181,7 +1181,7 @@ MonoBehaviour:
     y: 58
     width: 453
     height: 981
->>>>>>> ed6d803 (Implemented the safespot)
+>>>>>>> ed6d803690d37c482c733371c882b3779f1d69f9
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
