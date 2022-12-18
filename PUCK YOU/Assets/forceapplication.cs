@@ -31,17 +31,8 @@ public class forceapplication : MonoBehaviour
 		camOffset = new Vector3(0, 0, transform.position.z);
 		camera = Camera.main;
         rb = GetComponent<Rigidbody2D>();
-		//force = new Vector2((int)Random.Range(-1000, 1000), (int)Random.Range(-1000, 1000));
 	}
 
- //   void OnMouseDown()
- //   {
- //       noforceapp = true;
-	//	force = new Vector2((int)Random.Range(-1000, 1000), (int)Random.Range(-1000, 1000));
- //       GameObject scorobj = GameObject.FindGameObjectWithTag("Score");
- //       addscore script = scorobj.GetComponent<addscore>();
- //       script.updatescore();
-	//}
 
     void FixedUpdate()
     {
@@ -107,98 +98,6 @@ public class forceapplication : MonoBehaviour
 					forcevec = (transform.position + dif);
 				}
 				
-
-				//if (Mathf.Abs(dif.x) > Mathf.Abs(dif.y)) //abs is used to handle negative edge cases
-				//{
-				//	if (dif.x > maxlength)
-				//	{
-				//		dif.y = (Mathf.Abs((maxlength / dif.x)) * dif.y);
-				//		dif.x = maxlength;
-				//	}
-				//	else if (dif.x < (maxlength * -1))
-				//	{
-				//		dif.y = (Mathf.Abs((maxlength / dif.x)) * dif.y);
-				//		dif.x = -1 * maxlength;
-				//	}
-				//}else if (Mathf.Abs(dif.y) > Mathf.Abs(dif.x))
-				//{
-				//	if (dif.y > maxlength)
-				//	{
-				//		dif.x = (Mathf.Abs((maxlength / dif.y)) * dif.x);
-				//		dif.y = maxlength;
-				//	}
-				//	else if (dif.y < (maxlength * -1))
-				//	{
-				//		dif.x = (Mathf.Abs((maxlength / dif.y)) * dif.x);
-				//		dif.y = (maxlength * -1);
-				//	}
-				//}
-				//else
-				//{
-				//	float midlen = maxlength / 2;
-				//	float linelen = (midlen * midlen) + (midlen * midlen);
-				//	if ((dif.x > maxlength) && (dif.y > maxlength))
-				//	{
-				//		dif.x = midlen;
-				//		dif.y = midlen;
-				//	}
-				//	else if ((dif.x > maxlength) && (dif.y < -1 * maxlength))
-				//	{
-				//		dif.x = midlen;
-				//		dif.y = -1 * midlen;
-				//	}
-				//	else if ((dif.x < -1 * maxlength) && (dif.y > maxlength))
-				//	{
-				//		dif.y = midlen;
-				//		dif.x = -1 * midlen;
-				//	}
-				//	else if ((dif.x < -1 * maxlength) && (dif.y < -1 * maxlength))
-				//	{
-				//		dif.x = -1 * midlen;
-				//		dif.y = -1 * midlen;
-				//	}
-				//}
-
-
-				//if ((dif.x > maxlength)&&(dif.y > maxlength)){
-				//	dif.x = maxlength;
-				//	dif.y = maxlength;
-				//}
-				//else if((dif.x > maxlength) && (dif.y < -1* maxlength))
-				//{
-				//	dif.x = maxlength;
-				//	dif.y = -1* maxlength;
-				//}
-				//else if ((dif.x < -1* maxlength) && (dif.y > maxlength))
-				//{
-				//	dif.y = maxlength;
-				//	dif.x = -1 * maxlength;
-				//}
-				//else if ((dif.x < -1* maxlength) && (dif.y < -1 * maxlength))
-				//{
-				//	dif.x = -1 * maxlength;
-				//	dif.y = -1 * maxlength;
-				//}
-				//else if (dif.x > maxlength)
-				//{
-				//	dif.y = (Mathf.Abs((maxlength / dif.x)) * dif.y);
-				//	dif.x = maxlength;
-				//}
-				//else if (dif.x < (maxlength * -1))
-				//{
-				//	dif.y = (Mathf.Abs((maxlength / dif.x)) * dif.y);
-				//	dif.x = -1 * maxlength;
-				//}
-				//if (dif.y > maxlength)
-				//{
-				//	dif.x = (Mathf.Abs((maxlength / dif.y)) * dif.x);
-				//	dif.y = maxlength;
-				//}
-				//if (dif.y < (maxlength * -1))
-				//{
-				//	dif.x = (Mathf.Abs((maxlength / dif.y)) * dif.x);
-				//	dif.y = (maxlength * -1);
-				//}
 			}
 			if (Input.GetMouseButtonUp(0))
 			{
@@ -212,11 +111,7 @@ public class forceapplication : MonoBehaviour
 				isstopped = false;
 				forcevec = transform.position;
 			}
-			//if (noforceapp)
-			//{
-			//	rb.AddForce(force);
-			//	noforceapp = false;
-			//}
+
 		}
     }   
 }
