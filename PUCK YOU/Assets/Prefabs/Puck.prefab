@@ -18,11 +18,11 @@ GameObject:
   - component: {fileID: 626795333494426427}
   - component: {fileID: 2743931343167889084}
   - component: {fileID: 6566740381611798745}
-
-  - component: {fileID: 2155474245078211765}
+  - component: {fileID: 247549808545645722}
+  - component: {fileID: 8318057505728927233}
   m_Layer: 0
   m_Name: Puck
-  m_TagString: Untagged
+  m_TagString: Puck
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -107,6 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   puck: {fileID: 5291195860025249910}
+  force: {x: 0, y: 0}
   camera: {fileID: 0}
   winScreenCanvas: {fileID: 0}
   maxlength: 5
@@ -4990,7 +4991,6 @@ ParticleSystemRenderer:
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
 --- !u!114 &626795333494426427
---- !u!114 &2155474245078211765
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5044,7 +5044,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d7c879794dfda4687da0e400131852, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &247549808545645722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5291195860025249910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49f0ac72a78b7460b9e6c33c20a22bc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isFallingIn: 0
+--- !u!114 &8318057505728927233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5291195860025249910}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77228cdc927905547bc0d4cee2adcf11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TimerTxt: {fileID: 0}
+  puck: {fileID: 5291195860025249910}
+  fa: {fileID: 0}
+  hasPuck: 0
+  hasStarted: 0

@@ -7,6 +7,9 @@ TagManager:
   - Spike
   - Goal
   - MainMenuScreen
+  - Puck
+  - NetworkManagerUI
+  - TimerText
   layers:
   - Default
   - TransparentFX

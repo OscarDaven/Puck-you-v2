@@ -145,13 +145,22 @@ public class forceapplication : NetworkBehaviour
             }
 		}
 
+
+
         lastPos = currentPos;
         currentPos = transform.position;
         displacement = currentPos - lastPos;
 
+				if (Input.GetMouseButtonDown(0))
+				{
+					lr.positionCount = 2;
+					savepos = camera.ScreenToWorldPoint(Input.mousePosition) + camOffset;
+					lr.useWorldSpace = true;
+					lr.SetPosition(0, transform.position);
+				}
+
 
         if (timeTillShoot <= 0 && !isdead)
-
         {
 			if (Input.GetMouseButton(0))
 			{
@@ -200,14 +209,13 @@ public class forceapplication : NetworkBehaviour
 				MovePuckServerRpc(forcevec);
 				lr.enabled = false;
 				forcevec = Vector3.zero;
-				lr.SetPosition(1, transform.position);
-				lr.SetPosition(0, transform.position);
+				// lr.SetPosition(1, transform.position);
+				// lr.SetPosition(0, transform.position);
 				isstopped = false;
 				forcevec = transform.position;
 
 				timeTillReset = 0f;
 				timeTillShoot = SHOOT_COOLDOWN;
-				firstRun = true;
         
 			}
 			//if (noforceapp)
@@ -281,6 +289,7 @@ public class forceapplication : NetworkBehaviour
 		isdead = false;
 		lr.enabled = false;
 		transform.position = initpos;
+		DieServerRpc();
 		this.spriteRenderer.enabled = true;
 		forcevec = Vector3.zero;
 		lr.SetPosition(0, transform.position);
