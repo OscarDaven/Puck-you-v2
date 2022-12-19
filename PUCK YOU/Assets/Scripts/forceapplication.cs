@@ -6,6 +6,9 @@ using System.Threading;
 
 public class forceapplication : MonoBehaviour
 {
+	public const float SHOOT_COOLDOWN = 1.0f;
+	public const float RESET_TIME = 5.0f;
+
     public Vector2 force;
     Rigidbody2D rb;
     bool noforceapp = true;
@@ -27,8 +30,14 @@ public class forceapplication : MonoBehaviour
 	private bool isdead = false;
 	private SpriteRenderer spriteRenderer;
 	private Vector3 initpos;
+	float timeTillShoot;
+	float timeTillReset;
+	Vector3 lastPos;
+	Vector3 currentPos;
+	Vector3 displacement;
+    bool firstRun;
 
-	void Start()
+    void Start()
     {
 		initpos = transform.position;
 		spriteRenderer = GetComponent<SpriteRenderer>();
@@ -42,8 +51,13 @@ public class forceapplication : MonoBehaviour
 		camOffset = new Vector3(0, 0, transform.position.z);
 		camera = Camera.main;
         rb = GetComponent<Rigidbody2D>();
+		timeTillShoot = 0f;
+		timeTillReset = 0f;
+		lastPos = transform.position;
+		currentPos = transform.position;
+		displacement = Vector3.zero;
+		firstRun = true;
 	}
-
 
     void FixedUpdate()
     {
@@ -68,26 +82,58 @@ public class forceapplication : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-		if (finished)//triggered when someone reaches the goal
+		if (timeTillShoot > 0)
 		{
-			SceneManager.LoadScene(2);//move to win screen
+			timeTillShoot -= Time.deltaTime;
+			if (timeTillShoot <= 0)
+			{
+				timeTillReset = RESET_TIME;
+			}
+		}
+
+		if (timeTillReset > 0)
+		{
+			timeTillReset -= Time.deltaTime;
+			if (timeTillReset <= 0)
+			{
+                particles.Play();
+                isdead = true;
+                this.spriteRenderer.enabled = false;
+                rb.velocity = new Vector2(0, 0);
+                StartCoroutine(WaitToDie());
+                timeTillReset = 0f;
+                timeTillShoot = 0f;
+            }
+		}
+
+        lastPos = currentPos;
+        currentPos = transform.position;
+        displacement = currentPos - lastPos;
+
+        if (finished)//triggered when someone reaches the goal
+		{
+			SceneManager.LoadScene(2);
+			//move to win screen
 			finished = false;
 		}
-        if (isstopped || isdead)
+        if ((isstopped || timeTillShoot <= 0) && !isdead)
         {
-			if (Input.GetMouseButtonDown(0))
-			{
-				lr.enabled = true;
-				lr.positionCount = 2;
-				savepos = camera.ScreenToWorldPoint(Input.mousePosition) + camOffset;
-				lr.useWorldSpace = true;
-				lr.SetPosition(0, transform.position);
-			}
 			if (Input.GetMouseButton(0))
 			{
-				//problem with snapping to corners
-				Vector3 dif;
-				curPos = camera.ScreenToWorldPoint(Input.mousePosition) + camOffset;
+				if (firstRun)
+				{
+                    lr.enabled = true;
+                    lr.positionCount = 2;
+                    savepos = camera.ScreenToWorldPoint(Input.mousePosition) + camOffset;
+                    lr.useWorldSpace = true;
+                    lr.SetPosition(0, transform.position);
+					firstRun = false;
+                }
+                lr.SetPosition(0, transform.position);
+                //problem with snapping to corners
+                Vector3 dif;
+				savepos += displacement;
+				curPos = camera.ScreenToWorldPoint(Input.mousePosition) + camOffset + displacement;
 				dif = curPos - savepos;
 				float linelen = Mathf.Sqrt((dif.x * dif.x) + (dif.y * dif.y)); //calculates length of line between cursor and start point
 				if (linelen > maxlength)//checks to see if cursor is out of circle area
@@ -125,8 +171,14 @@ public class forceapplication : MonoBehaviour
 				forcevec = forcevec + transform.position;
 				rb.AddForce(forcevec);
 				lr.enabled = false;
+				forcevec = Vector3.zero;
+				lr.SetPosition(1, transform.position);
+				lr.SetPosition(0, transform.position);
 				isstopped = false;
 				forcevec = transform.position;
+				timeTillReset = 0f;
+				timeTillShoot = SHOOT_COOLDOWN;
+				firstRun = true;
 			}
 
 		}
@@ -135,16 +187,20 @@ public class forceapplication : MonoBehaviour
 	IEnumerator WaitToSwitch()
 	{
 		yield return new WaitForSeconds(.4f);
-		finished = true;
+        lr.enabled = false;
+        finished = true;
 	}
 
 	IEnumerator WaitToDie()
 	{
 		yield return new WaitForSeconds(.9f);
 		isdead = false;
+		lr.enabled = false;
 		transform.position = initpos;
 		this.spriteRenderer.enabled = true;
-		//Destroy(this); Change to reset to original position
+		forcevec = Vector3.zero;
+		lr.SetPosition(0, transform.position);
+		lr.SetPosition(1, transform.position);
 	}
 
 	void OnTriggerEnter2D(Collider2D other) //attempt to reset player position if moved outside of box
@@ -162,6 +218,8 @@ public class forceapplication : MonoBehaviour
 			this.spriteRenderer.enabled = false;
 			rb.velocity = new Vector2(0, 0);
 			StartCoroutine(WaitToDie());
+			timeTillReset = 0f;
+			timeTillShoot = 0f;
 		}
 	}
 }
