@@ -6,37 +6,31 @@ using UnityEngine.UI;
 
 public class Timer : MonoBehaviour
 {
-    public float TimeLeft;
-    public bool TimerOn = false; 
     public TMP_Text TimerTxt;
+    public GameObject puck;
+    public forceapplication fa;
 
     void Start() 
     {
-        TimerOn = true;
-        TimeLeft = 10;
-
+        puck = GameObject.Find("Puck");
+        fa = puck.GetComponent<forceapplication>();
     }
 
     void Update() 
     {
-        if (TimerOn) 
+        if (fa.timeTillShoot > 0)
         {
-            if (TimeLeft > 0)
-            {
-                updateTimer(TimeLeft);
-                TimeLeft -= Time.deltaTime;
-                
-            }
-            else {
-                TimerOn = false; 
-
-            }
+            updateTimer(fa.timeTillShoot, "WAIT");
+        }
+        else
+        {
+            updateTimer(fa.timeTillReset, "SHOOT!");
         }
     }
-    void updateTimer(float currentTime)
+    void updateTimer(float currentTime, string label)
     { 
 
-        TimerTxt.text= currentTime.ToString("F1");// string.Format("{0:00}",seconds);
+        TimerTxt.text= string.Format("{0}\n{1}", label, currentTime.ToString("F1"));// string.Format("{0:00}",seconds);
     }
          
 }

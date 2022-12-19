@@ -13,8 +13,9 @@ public class forceapplication : NetworkBehaviour
 
     // public Vector2 force = new Vector2(10.0f, 10.0f);
 
-	public const float SHOOT_COOLDOWN = 1.0f;
-	public const float RESET_TIME = 5.0f;
+
+	public const float SHOOT_COOLDOWN = 2.0f;
+	public const float RESET_TIME = 4.0f;
 
     public Vector2 force;
     Rigidbody2D rb;
@@ -54,12 +55,11 @@ public class forceapplication : NetworkBehaviour
 	float curfulltime;
 	// public GameObject[] cameras;
 
-	float timeTillShoot;
-	float timeTillReset;
+	public float timeTillShoot;
+	public float timeTillReset;
 	Vector3 lastPos;
 	Vector3 currentPos;
 	Vector3 displacement;
-    bool firstRun;
 
     void Start()
     {
@@ -93,7 +93,6 @@ public class forceapplication : NetworkBehaviour
 		lastPos = transform.position;
 		currentPos = transform.position;
 		displacement = Vector3.zero;
-		firstRun = true;
 	}
 
 
@@ -142,13 +141,7 @@ public class forceapplication : NetworkBehaviour
 			timeTillReset -= Time.deltaTime;
 			if (timeTillReset <= 0)
 			{
-                particles.Play();
-                isdead = true;
-                this.spriteRenderer.enabled = false;
-                rb.velocity = new Vector2(0, 0);
                 StartCoroutine(WaitToDie());
-                timeTillReset = 0f;
-                timeTillShoot = 0f;
             }
 		}
 
@@ -158,18 +151,11 @@ public class forceapplication : NetworkBehaviour
 
 
         if (timeTillShoot <= 0 && !isdead)
+
         {
 			if (Input.GetMouseButton(0))
 			{
-				if (firstRun)
-				{
-                    lr.enabled = true;
-                    lr.positionCount = 2;
-                    savepos = camera.ScreenToWorldPoint(Input.mousePosition) + camOffset;
-                    lr.useWorldSpace = true;
-                    lr.SetPosition(0, transform.position);
-					firstRun = false;
-                }
+                lr.enabled = true;
                 lr.SetPosition(0, transform.position);
                 //problem with snapping to corners
                 Vector3 dif;
@@ -200,7 +186,6 @@ public class forceapplication : NetworkBehaviour
 					lr.SetPosition(1, transform.position + dif);
 					forcevec = (transform.position + dif);
 				}
-				
 			}
 			if (Input.GetMouseButtonUp(0))
 			{
@@ -288,7 +273,11 @@ public class forceapplication : NetworkBehaviour
 
 	IEnumerator WaitToDie()
 	{
-		yield return new WaitForSeconds(.9f);
+        particles.Play();
+        isdead = true;
+        this.spriteRenderer.enabled = false;
+        rb.velocity = new Vector2(0, 0);
+        yield return new WaitForSeconds(.9f);
 		isdead = false;
 		lr.enabled = false;
 		transform.position = initpos;
@@ -296,7 +285,9 @@ public class forceapplication : NetworkBehaviour
 		forcevec = Vector3.zero;
 		lr.SetPosition(0, transform.position);
 		lr.SetPosition(1, transform.position);
-	}
+        timeTillReset = 0f;
+        timeTillShoot = 0f;
+    }
 
 	void OnTriggerEnter2D(Collider2D other) //attempt to reset player position if moved outside of box
 	{
@@ -318,9 +309,7 @@ public class forceapplication : NetworkBehaviour
 			this.spriteRenderer.enabled = false;
 			timerRunning = true;
 			rb.velocity = new Vector2(0, 0);
-			StartCoroutine(WaitToDie());
-			timeTillReset = 0f;
-			timeTillShoot = 0f;
+			//StartCoroutine(WaitToDie());
 		}
 	}
 

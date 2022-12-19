@@ -18,6 +18,8 @@ GameObject:
   - component: {fileID: 626795333494426427}
   - component: {fileID: 2743931343167889084}
   - component: {fileID: 6566740381611798745}
+
+  - component: {fileID: 2155474245078211765}
   m_Layer: 0
   m_Name: Puck
   m_TagString: Untagged
@@ -111,6 +113,8 @@ MonoBehaviour:
   powerscale: 100
   maxTime: 2
   stopvel: 0.5
+  timeTillShoot: 0
+  timeTillReset: 0
 --- !u!50 &5291195860025249917
 Rigidbody2D:
   serializedVersion: 4
@@ -4986,6 +4990,7 @@ ParticleSystemRenderer:
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
 --- !u!114 &626795333494426427
+--- !u!114 &2155474245078211765
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5039,3 +5044,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d7c879794dfda4687da0e400131852, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Script: {fileID: 11500000, guid: 49f0ac72a78b7460b9e6c33c20a22bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isFallingIn: 0
