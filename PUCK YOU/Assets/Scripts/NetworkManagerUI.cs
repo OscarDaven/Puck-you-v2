@@ -6,16 +6,18 @@ using UnityEngine.UI;
 
 public class NetworkManagerUI : MonoBehaviour
 {
-
-    [SerializeField] private Button hostBtn;
-    [SerializeField] private Button clientBtn;
+    public Canvas mainMenuCanvas;
+    public Button hostBtn;
+    public Button clientBtn;
 
     private void Awake(){
         hostBtn.onClick.AddListener(() => {
             NetworkManager.Singleton.StartHost();
+            mainMenuCanvas.enabled = false;
         });
         clientBtn.onClick.AddListener(() => {
             NetworkManager.Singleton.StartClient();
+            mainMenuCanvas.enabled = false;
         });
     }
 }
