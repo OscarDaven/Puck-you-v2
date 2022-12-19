@@ -5,6 +5,7 @@ using UnityEngine;
 public class PuckVars : MonoBehaviour
 {
 	public bool isFallingIn;
+
 	// Use this for initialization
 	void Start()
 	{

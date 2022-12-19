@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class safespot : MonoBehaviour
 {
-	public const float MIN_DIST_SNAP_TO_SPOT = (float) 0.15;
-	public const float IMPULSE_CONST = (float) 1.0;
+	public const float MIN_DIST_SNAP_TO_SPOT = (float) 0.2;
+	public const float IMPULSE_CONST = (float) 2.0;
 
 	ContactFilter2D cf;
 	Collider2D cl;
@@ -21,12 +21,6 @@ public class safespot : MonoBehaviour
         cf = new ContactFilter2D();
         cl = GetComponent(typeof(Collider2D)) as Collider2D;
         results = new Collider2D[8];
-    }
-
-	// Update is called once a frame
-    void Update()
-    {
-        
     }
 
     // FixedUpdate is called in const time
@@ -78,7 +72,9 @@ public class safespot : MonoBehaviour
 				rb = other.GetComponent(typeof(Rigidbody2D)) as Rigidbody2D;
 				rb.velocity = Vector2.zero;
 				vars.isFallingIn = false;
-			}
+				other.GetComponent<forceapplication>().timeTillShoot = 0f;
+                other.GetComponent<forceapplication>().timeTillReset = 0f;
+            }
 		}
 	}
 
@@ -87,5 +83,6 @@ public class safespot : MonoBehaviour
         vars = other.gameObject.GetComponent(typeof(PuckVars)) as PuckVars;
         Debug.Log("Exited " + other);
 		vars.isFallingIn = false;
+		other.GetComponent<forceapplication>().timeTillShoot = forceapplication.SHOOT_COOLDOWN;
     }
 }

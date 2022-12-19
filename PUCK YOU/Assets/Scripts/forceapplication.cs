@@ -6,8 +6,8 @@ using System.Threading;
 
 public class forceapplication : MonoBehaviour
 {
-	public const float SHOOT_COOLDOWN = 1.0f;
-	public const float RESET_TIME = 5.0f;
+	public const float SHOOT_COOLDOWN = 2.0f;
+	public const float RESET_TIME = 4.0f;
 
     public Vector2 force;
     Rigidbody2D rb;
@@ -30,12 +30,11 @@ public class forceapplication : MonoBehaviour
 	private bool isdead = false;
 	private SpriteRenderer spriteRenderer;
 	private Vector3 initpos;
-	float timeTillShoot;
-	float timeTillReset;
+	public float timeTillShoot;
+	public float timeTillReset;
 	Vector3 lastPos;
 	Vector3 currentPos;
 	Vector3 displacement;
-    bool firstRun;
 
     void Start()
     {
@@ -56,7 +55,6 @@ public class forceapplication : MonoBehaviour
 		lastPos = transform.position;
 		currentPos = transform.position;
 		displacement = Vector3.zero;
-		firstRun = true;
 	}
 
     void FixedUpdate()
@@ -96,13 +94,7 @@ public class forceapplication : MonoBehaviour
 			timeTillReset -= Time.deltaTime;
 			if (timeTillReset <= 0)
 			{
-                particles.Play();
-                isdead = true;
-                this.spriteRenderer.enabled = false;
-                rb.velocity = new Vector2(0, 0);
                 StartCoroutine(WaitToDie());
-                timeTillReset = 0f;
-                timeTillShoot = 0f;
             }
 		}
 
@@ -116,19 +108,20 @@ public class forceapplication : MonoBehaviour
 			//move to win screen
 			finished = false;
 		}
+
+		if (Input.GetMouseButtonDown(0))
+		{
+            lr.positionCount = 2;
+            savepos = camera.ScreenToWorldPoint(Input.mousePosition) + camOffset;
+            lr.useWorldSpace = true;
+            lr.SetPosition(0, transform.position);
+        }
+
         if ((isstopped || timeTillShoot <= 0) && !isdead)
         {
 			if (Input.GetMouseButton(0))
 			{
-				if (firstRun)
-				{
-                    lr.enabled = true;
-                    lr.positionCount = 2;
-                    savepos = camera.ScreenToWorldPoint(Input.mousePosition) + camOffset;
-                    lr.useWorldSpace = true;
-                    lr.SetPosition(0, transform.position);
-					firstRun = false;
-                }
+                lr.enabled = true;
                 lr.SetPosition(0, transform.position);
                 //problem with snapping to corners
                 Vector3 dif;
@@ -159,7 +152,6 @@ public class forceapplication : MonoBehaviour
 					lr.SetPosition(1, transform.position + dif);
 					forcevec = (transform.position + dif);
 				}
-				
 			}
 			if (Input.GetMouseButtonUp(0))
 			{
@@ -178,9 +170,7 @@ public class forceapplication : MonoBehaviour
 				forcevec = transform.position;
 				timeTillReset = 0f;
 				timeTillShoot = SHOOT_COOLDOWN;
-				firstRun = true;
 			}
-
 		}
     }
 
@@ -193,7 +183,11 @@ public class forceapplication : MonoBehaviour
 
 	IEnumerator WaitToDie()
 	{
-		yield return new WaitForSeconds(.9f);
+        particles.Play();
+        isdead = true;
+        this.spriteRenderer.enabled = false;
+        rb.velocity = new Vector2(0, 0);
+        yield return new WaitForSeconds(.9f);
 		isdead = false;
 		lr.enabled = false;
 		transform.position = initpos;
@@ -201,7 +195,9 @@ public class forceapplication : MonoBehaviour
 		forcevec = Vector3.zero;
 		lr.SetPosition(0, transform.position);
 		lr.SetPosition(1, transform.position);
-	}
+        timeTillReset = 0f;
+        timeTillShoot = 0f;
+    }
 
 	void OnTriggerEnter2D(Collider2D other) //attempt to reset player position if moved outside of box
 	{
@@ -213,13 +209,7 @@ public class forceapplication : MonoBehaviour
 		else if (other.gameObject.CompareTag("Spike"))
 		{
 			Debug.Log("Puck collided with spike");
-			particles.Play();
-			isdead = true;
-			this.spriteRenderer.enabled = false;
-			rb.velocity = new Vector2(0, 0);
 			StartCoroutine(WaitToDie());
-			timeTillReset = 0f;
-			timeTillShoot = 0f;
 		}
 	}
 }
