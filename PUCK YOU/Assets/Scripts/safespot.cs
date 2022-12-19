@@ -41,7 +41,7 @@ public class safespot : MonoBehaviour
 					Vector3 dir = transform.position - results[i].gameObject.transform.position;
 					dir.Normalize();
 					Vector2 impulse = (Vector2) dir;
-					impulse *= Mathf.Pow(dist, 2.0f) * IMPULSE_CONST;
+					impulse *= (float) (IMPULSE_CONST / Mathf.Pow(dist, 2.0f));
 					rb = results[i].gameObject.GetComponent(typeof(Rigidbody2D)) as Rigidbody2D;
 					Debug.Log(rb);
 					rb.AddForce(impulse, ForceMode2D.Impulse);
