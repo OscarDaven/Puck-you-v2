@@ -4,7 +4,12 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Score
+  - Spike
+  - Goal
+  - MainMenuScreen
+  - Puck
+  - NetworkManagerUI
+  - TimerText
   layers:
   - Default
   - TransparentFX
