@@ -19,13 +19,19 @@ public class forceapplication : NetworkBehaviour
     Vector3 curPos;
     Vector3 lastpos;
     bool isstopped = true;
+		bool cool = true;
 	public float maxlength = 5;
 	public float powerscale = 100;
 	private Vector3 forcevec;
 	public float stopvel = 0.5f;
 	public bool isdecreasing;
   private Vector3 lastvel;
-
+	 float curx;
+	 float cury;
+	 float pastx;
+	 float pasty;
+	public float maxTime;
+	 float curTime;
 
 
 	void Start()
@@ -33,6 +39,7 @@ public class forceapplication : NetworkBehaviour
 
 			if (!IsOwner) return;
 
+			curTime = maxTime;
 			Debug.Log("START");
 			// puckTransform = (-0.66, -0.21, 0);
 
@@ -49,7 +56,7 @@ public class forceapplication : NetworkBehaviour
 			GetrbServerRpc();
 			rb = puck.GetComponent<Rigidbody2D>();
 
-		SetlastvelServerRpc();
+		// SetlastvelServerRpc();
 
 				// puck = rb.gameObject;
 				// puckTransform = transform;
@@ -75,41 +82,55 @@ public class forceapplication : NetworkBehaviour
  //       script.updatescore();
 	//}
 
-    void FixedUpdate()
-    {
+    // void FixedUpdate()
+    // {
 
-			GetrbServerRpc();
-			rb = puck.GetComponent<Rigidbody2D>();
+		// 	if (!IsOwner) return;
+
+		// 	GetrbServerRpc();
+		// 	// rb = puck.GetComponent<Rigidbody2D>();
+
+		// 	// lastvel = puck.GetComponent<forceapplication>().lastvel;
+		// 	// stopvel = puck.GetComponent<forceapplication>().stopvel;
 
 
-			// if (!IsOwner) return;
+
+		// 	SetcurvelServerRpc();
+
+		// 	// float curx = Mathf.Abs(rb.velocity.x);
+		// 	// float cury = Mathf.Abs(rb.velocity.y);
 
 
-			float curx = Mathf.Abs(rb.velocity.x);
-			float cury = Mathf.Abs(rb.velocity.y);
-			float pastx = Mathf.Abs(lastvel.x);
-			float pasty = Mathf.Abs(lastvel.y);
+		// 	if ((curx < pastx) && (cury < pasty))//checks to see if the velocity vector of the puck is decreasing
+		// 	{
+		// 		isdecreasing = true;
+		// 	}
+		// 	// Debug.Log("decreasing " + isdecreasing);
+		// 	// Debug.Log("stopped" + isstopped);
+		// 	if ((isstopped == false)&&(isdecreasing)&&(Mathf.Abs(rb.velocity.x) < stopvel)&&(Mathf.Abs(rb.velocity.y) < stopvel)){ //sometimes triggers right after you shoot, way too early
+				
+		// 		isstopped = true;
 
-			if ((curx < pastx) && (cury < pasty))//checks to see if the velocity vector of the puck is decreasing
-			{
-				isdecreasing = true;
-			}
-			// Debug.Log("decreasing " + isdecreasing);
-			// Debug.Log("stopped" + isstopped);
-			if ((isstopped == false)&&(isdecreasing)&&(Mathf.Abs(rb.velocity.x) < stopvel)&&(Mathf.Abs(rb.velocity.y) < stopvel)){ //sometimes triggers right after you shoot, way too early
-							
-				isstopped = true;
+		// 		SetrbZeroVelocityServerRpc();
+		// 		// rb.velocity = new Vector3(0,0,transform.position.z);
+		// 		isdecreasing = false;
+		// 	}
 
-				SetrbZeroVelocityServerRpc();
-				rb.velocity = new Vector3(0,0,transform.position.z);
-				isdecreasing = false;
-			}
-			lastvel = rb.velocity;
-		}
+		// 	// lastvel = rb.velocity;
+		// 	SetlastvelServerRpc();
+		// 	// printrbvelServerRpc(rb.velocity);
+		// }
 
     // Update is called once per frame
     void Update()
     {
+
+			if (!cool){
+				curTime -= Time.deltaTime;
+			}
+			if (curTime <= 0){
+				cool = true;
+			}
 
 			if (!IsOwner) return;
 
@@ -117,8 +138,9 @@ public class forceapplication : NetworkBehaviour
 			rb = puck.GetComponent<Rigidbody2D>();
 
 
-        if (isstopped)
-        {
+      if (cool)
+      {
+				
 			if (Input.GetMouseButtonDown(0))
 			{
 				Debug.Log("MBDOWN");
@@ -174,6 +196,8 @@ public class forceapplication : NetworkBehaviour
 				lr.enabled = false;
 				isstopped = false;
 				forcevec = transform.position;
+				cool = false;
+				curTime = maxTime;
 			}
 			//if (noforceapp)
 			//{
@@ -212,12 +236,31 @@ public class forceapplication : NetworkBehaviour
 		isstopped = true;
 	}
 
+
+
 	[ServerRpc(RequireOwnership = false)]
 	private void SetlastvelServerRpc(){
-		lastvel = new Vector3(0,0,transform.position.z);
+		lastvel = rb.velocity;
+		pastx = Mathf.Abs(lastvel.x);
+		pasty = Mathf.Abs(lastvel.y);
+	}
+
+	[ServerRpc(RequireOwnership = false)]
+	private void SetcurvelServerRpc(){
+		curx = Mathf.Abs(rb.velocity.x);
+		cury = Mathf.Abs(rb.velocity.y);	
+		Debug.Log(curx);
 	}
 
 
+
+	[ServerRpc(RequireOwnership = false)]
+	private void printrbvelServerRpc(Vector3 pastx){
+		Debug.Log(pastx);
+	}
+
+	
+	
 	// [ServerRpc]
 	// private void SpawnPuckServerRpc(){
 	// 	// Instantiate(puck, new Vector3(0, 0, 0), Quaternion.identity);
