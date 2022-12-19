@@ -12,6 +12,11 @@ public class forceapplication : NetworkBehaviour
 	// [SerializeField] public Transform puckTransform;
 
     // public Vector2 force = new Vector2(10.0f, 10.0f);
+
+	public const float SHOOT_COOLDOWN = 1.0f;
+	public const float RESET_TIME = 5.0f;
+
+    public Vector2 force;
     Rigidbody2D rb;
     // bool noforceapp = true;
     LineRenderer lr;
@@ -42,13 +47,21 @@ public class forceapplication : NetworkBehaviour
 	private bool isdead = false;
 	private SpriteRenderer spriteRenderer;
 	private Vector3 initpos;
+  
+  
 	bool timerRunning = false;
 	float fulltime = .9f;
 	float curfulltime;
 	// public GameObject[] cameras;
 
+	float timeTillShoot;
+	float timeTillReset;
+	Vector3 lastPos;
+	Vector3 currentPos;
+	Vector3 displacement;
+    bool firstRun;
 
-	void Start()
+    void Start()
     {
 			winScreenCanvas	= GameObject.FindGameObjectWithTag("Finish").GetComponent<Canvas>();
 
@@ -70,9 +83,18 @@ public class forceapplication : NetworkBehaviour
 		camera = Camera.main;
 
 			GetrbServerRpc();
-			rb = puck.GetComponent<Rigidbody2D>();
-	}
 
+
+
+
+        rb = GetComponent<Rigidbody2D>();
+		timeTillShoot = 0f;
+		timeTillReset = 0f;
+		lastPos = transform.position;
+		currentPos = transform.position;
+		displacement = Vector3.zero;
+		firstRun = true;
+	}
 
 
     // Update is called once per frame
@@ -85,16 +107,10 @@ public class forceapplication : NetworkBehaviour
 				timerRunning = false;
 				DieServerRpc();
 				transform.position = initpos;
-			  cool = true;
 				this.spriteRenderer.enabled = true;
 				curfulltime = fulltime;
 			}
-			if (!cool){
-				curTime -= Time.deltaTime;
-			}
-			if (curTime <= 0){
-				cool = true;
-			}
+
 
 			if (!IsOwner) return;
 
@@ -102,8 +118,6 @@ public class forceapplication : NetworkBehaviour
 			rb = puck.GetComponent<Rigidbody2D>();
 
 
-      if (cool)
-      {
 				
 			if (finished)//triggered when someone reaches the goal
 			{
@@ -113,20 +127,54 @@ public class forceapplication : NetworkBehaviour
 				finished = false;
 			}
 
-			if (Input.GetMouseButtonDown(0))
+
+		if (timeTillShoot > 0)
+		{
+			timeTillShoot -= Time.deltaTime;
+			if (timeTillShoot <= 0)
 			{
-				// Debug.Log("MBDOWN");
-				lr.enabled = true;
-				lr.positionCount = 2;
-				savepos = camera.ScreenToWorldPoint(Input.mousePosition) + camOffset;
-				lr.useWorldSpace = true;
-				lr.SetPosition(0, transform.position);
+				timeTillReset = RESET_TIME;
 			}
+		}
+
+		if (timeTillReset > 0)
+		{
+			timeTillReset -= Time.deltaTime;
+			if (timeTillReset <= 0)
+			{
+                particles.Play();
+                isdead = true;
+                this.spriteRenderer.enabled = false;
+                rb.velocity = new Vector2(0, 0);
+                StartCoroutine(WaitToDie());
+                timeTillReset = 0f;
+                timeTillShoot = 0f;
+            }
+		}
+
+        lastPos = currentPos;
+        currentPos = transform.position;
+        displacement = currentPos - lastPos;
+
+
+        if (timeTillShoot <= 0 && !isdead)
+        {
 			if (Input.GetMouseButton(0))
 			{
-				//problem with snapping to corners
-				Vector3 dif;
-				curPos = camera.ScreenToWorldPoint(Input.mousePosition) + camOffset;
+				if (firstRun)
+				{
+                    lr.enabled = true;
+                    lr.positionCount = 2;
+                    savepos = camera.ScreenToWorldPoint(Input.mousePosition) + camOffset;
+                    lr.useWorldSpace = true;
+                    lr.SetPosition(0, transform.position);
+					firstRun = false;
+                }
+                lr.SetPosition(0, transform.position);
+                //problem with snapping to corners
+                Vector3 dif;
+				savepos += displacement;
+				curPos = camera.ScreenToWorldPoint(Input.mousePosition) + camOffset + displacement;
 				dif = curPos - savepos;
 				float linelen = Mathf.Sqrt((dif.x * dif.x) + (dif.y * dif.y)); //calculates length of line between cursor and start point
 				if (linelen > maxlength)//checks to see if cursor is out of circle area
@@ -166,9 +214,16 @@ public class forceapplication : NetworkBehaviour
 				cool = false;
 				MovePuckServerRpc(forcevec);
 				lr.enabled = false;
+				forcevec = Vector3.zero;
+				lr.SetPosition(1, transform.position);
+				lr.SetPosition(0, transform.position);
 				isstopped = false;
 				forcevec = transform.position;
-				curTime = maxTime;
+
+				timeTillReset = 0f;
+				timeTillShoot = SHOOT_COOLDOWN;
+				firstRun = true;
+        
 			}
 			//if (noforceapp)
 			//{
@@ -217,7 +272,8 @@ public class forceapplication : NetworkBehaviour
 	IEnumerator WaitToSwitch()
 	{
 		yield return new WaitForSeconds(.4f);
-		finished = true;
+        lr.enabled = false;
+        finished = true;
 	}
 
 	// IEnumerator WaitToDie()
@@ -229,6 +285,18 @@ public class forceapplication : NetworkBehaviour
 	// 	DieServerRpc();
 	// 	//Destroy(this); Change to reset to original position
 	// }
+
+	IEnumerator WaitToDie()
+	{
+		yield return new WaitForSeconds(.9f);
+		isdead = false;
+		lr.enabled = false;
+		transform.position = initpos;
+		this.spriteRenderer.enabled = true;
+		forcevec = Vector3.zero;
+		lr.SetPosition(0, transform.position);
+		lr.SetPosition(1, transform.position);
+	}
 
 	void OnTriggerEnter2D(Collider2D other) //attempt to reset player position if moved outside of box
 	{
@@ -249,6 +317,10 @@ public class forceapplication : NetworkBehaviour
 		  cool = false;
 			this.spriteRenderer.enabled = false;
 			timerRunning = true;
+			rb.velocity = new Vector2(0, 0);
+			StartCoroutine(WaitToDie());
+			timeTillReset = 0f;
+			timeTillShoot = 0f;
 		}
 	}
 
